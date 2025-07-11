@@ -25,6 +25,7 @@ import (
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricsasync"
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssync"
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssyncmap"
+	"github.com/kislaykishore/benchmarks/metrics_bench/reducedbuckets"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/contrib/detectors/gcp"
 	"go.opentelemetry.io/otel"
@@ -49,7 +50,7 @@ func BenchmarkFsOpsCountSync(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricssync.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := metricssync.NewOTelMetrics(ctx, 3, 1)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -70,7 +71,7 @@ func BenchmarkFsOpsLatencySync(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricssync.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := reducedbuckets.NewOTelMetrics(ctx, 3, 1)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -353,6 +354,49 @@ func BenchmarkFsOpsLatencyAsyncDiscardMetrics(b *testing.B) {
 	b.RunParallel(func(pb *testing.PB) {
 		for i := 0; pb.Next(); i++ {
 			metrics.FsOpsLatency(ctx, 100, "StatFS")
+		}
+	})
+}
+
+func BenchmarkFsOpsLatencyReducedBucketsSync(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricssync.NewOTelMetrics(ctx, 3, bufferSize)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			metrics.FsOpsLatency(ctx, 100, "StatFS")
+		}
+	})
+}
+
+func BenchmarkFsOpsLatencyReducedBucketsSyncMultipleOps(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := reducedbuckets.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsLatency(ctx, 100, op)
 		}
 	})
 }
