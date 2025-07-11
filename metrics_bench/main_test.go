@@ -88,7 +88,7 @@ func BenchmarkFsOpsCountAsync(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -109,7 +109,7 @@ func BenchmarkFsOpsLatencyAsync(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -198,7 +198,7 @@ func BenchmarkFsOpsCountAsyncMultipleOps(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -220,7 +220,7 @@ func BenchmarkFsOpsLatencyAsyncMultipleOps(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}

@@ -20,6 +20,7 @@ import (
 	"context"
 	"errors"
 	"sync/atomic"
+	"testing"
 	"time"
 
 	"go.opentelemetry.io/otel"
@@ -101,6 +102,7 @@ type MetricHandle interface {
 
 type otelMetrics struct {
 	ch                                     chan func()
+	b                                      *testing.B
 	fsOpsCountFsOpBatchForgetAtomic        *atomic.Int64
 	fsOpsCountFsOpCreateFileAtomic         *atomic.Int64
 	fsOpsCountFsOpCreateLinkAtomic         *atomic.Int64
@@ -204,6 +206,7 @@ func (o *otelMetrics) FsOpsCount(
 
 	}: // Do nothing
 	default: // Unblock writes to channel if it's full.
+		o.b.FailNow()
 	}
 }
 
@@ -277,10 +280,11 @@ func (o *otelMetrics) FsOpsLatency(
 
 	}: // Do nothing
 	default: // Unblock writes to channel if it's full.
+		o.b.FailNow()
 	}
 }
 
-func NewOTelMetrics(ctx context.Context, workers int, bufferSize int) (*otelMetrics, error) {
+func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, b *testing.B) (*otelMetrics, error) {
 	ch := make(chan func(), bufferSize)
 	for range workers {
 		go func() {
@@ -374,6 +378,7 @@ func NewOTelMetrics(ctx context.Context, workers int, bufferSize int) (*otelMetr
 
 	return &otelMetrics{
 		ch:                                     ch,
+		b:                                      b,
 		fsOpsCountFsOpBatchForgetAtomic:        &fsOpsCountFsOpBatchForgetAtomic,
 		fsOpsCountFsOpCreateFileAtomic:         &fsOpsCountFsOpCreateFileAtomic,
 		fsOpsCountFsOpCreateLinkAtomic:         &fsOpsCountFsOpCreateLinkAtomic,
