@@ -246,6 +246,29 @@ func BenchmarkFsOpsLatencyAsyncMultipleOps(b *testing.B) {
 	})
 }
 
+func BenchmarkFsOpsCountMapSyncMultipleOps(b *testing.B) {
+	// We use a no-op meter provider to avoid any overhead from metric exporters.
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricssyncmap.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsCount(1, op)
+		}
+	})
+}
+
 func BenchmarkFsOpsCountAsyncMultipleOpsDiscardMetrics(b *testing.B) {
 	// We use a no-op meter provider to avoid any overhead from metric exporters.
 	ctx := context.Background()
@@ -255,9 +278,7 @@ func BenchmarkFsOpsCountAsyncMultipleOpsDiscardMetrics(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1, func() {
-		b.FailNow()
-	})
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1, func() {})
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -293,7 +314,7 @@ func BenchmarkFsOpsLatencyAsyncMultipleOpsDiscardMetrics(b *testing.B) {
 	})
 }
 
-func BenchmarkFsOpsCountMapSyncMultipleOps(b *testing.B) {
+func BenchmarkFsOpsCountAsyncDiscardMetrics(b *testing.B) {
 	// We use a no-op meter provider to avoid any overhead from metric exporters.
 	ctx := context.Background()
 	shFn := setupOTelMetricExporters(ctx)
@@ -302,7 +323,7 @@ func BenchmarkFsOpsCountMapSyncMultipleOps(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricssyncmap.NewOTelMetrics(ctx, 3, 1024000)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1, func() {})
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -310,8 +331,28 @@ func BenchmarkFsOpsCountMapSyncMultipleOps(b *testing.B) {
 	b.ResetTimer()
 	b.RunParallel(func(pb *testing.PB) {
 		for i := 0; pb.Next(); i++ {
-			op := fsOps[i%len(fsOps)]
-			metrics.FsOpsCount(1, op)
+			metrics.FsOpsCount(1, "StatFS")
+		}
+	})
+}
+
+func BenchmarkFsOpsLatencyAsyncDiscardMetrics(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1, func() {})
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			metrics.FsOpsLatency(ctx, 100, "StatFS")
 		}
 	})
 }
