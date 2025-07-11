@@ -24,6 +24,7 @@ import (
 
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricsasync"
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssync"
+	"github.com/kislaykishore/benchmarks/metrics_bench/metricssyncmap"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/contrib/detectors/gcp"
 	"go.opentelemetry.io/otel"
@@ -32,6 +33,8 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
+
+var fsOps = []string{"StatFS", "LookUpInode", "GetInodeAttributes", "Open", "Read", "Write", "Close"}
 
 func BenchmarkFsOpsCountSync(b *testing.B) {
 	// We use a no-op meter provider to avoid any overhead from metric exporters.
@@ -119,6 +122,141 @@ func BenchmarkFsOpsLatencyAsync(b *testing.B) {
 	})
 }
 
+func BenchmarkFsOpsCountMapSync(b *testing.B) {
+	// We use a no-op meter provider to avoid any overhead from metric exporters.
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricssyncmap.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			metrics.FsOpsCount(1, "StatFS")
+		}
+	})
+}
+
+func BenchmarkFsOpsCountSyncMultipleOps(b *testing.B) {
+	// We use a no-op meter provider to avoid any overhead from metric exporters.
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricssync.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsCount(1, op)
+		}
+	})
+}
+
+func BenchmarkFsOpsLatencySyncMultipleOps(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricssync.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsLatency(ctx, 100, op)
+		}
+	})
+}
+
+func BenchmarkFsOpsCountAsyncMultipleOps(b *testing.B) {
+	// We use a no-op meter provider to avoid any overhead from metric exporters.
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsCount(1, op)
+		}
+	})
+}
+
+func BenchmarkFsOpsLatencyAsyncMultipleOps(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsLatency(ctx, 100, op)
+		}
+	})
+}
+
+func BenchmarkFsOpsCountMapSyncMultipleOps(b *testing.B) {
+	// We use a no-op meter provider to avoid any overhead from metric exporters.
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := metricssyncmap.NewOTelMetrics(ctx, 3, 1024000)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			op := fsOps[i%len(fsOps)]
+			metrics.FsOpsCount(1, op)
+		}
+	})
+}
+
 func setupOTelMetricExporters(ctx context.Context) (shutdownFn ShutdownFn) {
 	shutdownFns := make([]ShutdownFn, 0)
 	options := make([]metric.Option, 0)
@@ -128,9 +266,7 @@ func setupOTelMetricExporters(ctx context.Context) (shutdownFn ShutdownFn) {
 	shutdownFns = append(shutdownFns, shutdownFn)
 
 	res, err := getResource(ctx)
-	if err != nil {
-		//logger.Errorf("Error while fetching resource: %v", err)
-	} else {
+	if err == nil {
 		options = append(options, metric.WithResource(res))
 	}
 
@@ -148,7 +284,6 @@ func setupPrometheus(port int64) ([]metric.Option, ShutdownFn) {
 	}
 	exporter, err := prometheus.New(prometheus.WithoutUnits(), prometheus.WithoutCounterSuffixes(), prometheus.WithoutScopeInfo(), prometheus.WithoutTargetInfo())
 	if err != nil {
-		//logger.Errorf("Error while creating prometheus exporter:%v", err)
 		return nil, nil
 	}
 	shutdownCh := make(chan context.Context)
@@ -181,14 +316,10 @@ func serveMetrics(port int64, shutdownCh <-chan context.Context, done chan<- int
 	go func() {
 		ctx := <-shutdownCh
 		defer func() { done <- true }()
-		//logger.Info("Shutting down Prometheus exporter.")
 		if err := prometheusServer.Shutdown(ctx); err != nil {
-			//logger.Errorf("Error while shutting down Prometheus exporter:%v", err)
 			return
 		}
-		//logger.Info("Prometheus exporter shutdown")
 	}()
-	//logger.Info("Prometheus collector exporter started")
 }
 
 func getResource(ctx context.Context) (*resource.Resource, error) {
