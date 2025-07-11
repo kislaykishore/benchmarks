@@ -34,6 +34,10 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
 
+const (
+	bufferSize = 8 * 10240000
+)
+
 var fsOps = []string{"StatFS", "LookUpInode", "GetInodeAttributes", "Open", "Read", "Write", "Close"}
 
 func BenchmarkFsOpsCountSync(b *testing.B) {
@@ -88,7 +92,7 @@ func BenchmarkFsOpsCountAsync(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, bufferSize, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -109,7 +113,7 @@ func BenchmarkFsOpsLatencyAsync(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, bufferSize, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -198,7 +202,7 @@ func BenchmarkFsOpsCountAsyncMultipleOps(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, bufferSize, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
@@ -220,7 +224,7 @@ func BenchmarkFsOpsLatencyAsyncMultipleOps(b *testing.B) {
 	})
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
-	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, 10240000, b)
+	metrics, err := metricsasync.NewOTelMetrics(ctx, 3, bufferSize, b)
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
