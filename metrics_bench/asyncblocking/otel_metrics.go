@@ -14,11 +14,12 @@
 
 // **** DO NOT EDIT - FILE IS AUTO-GENERATED ****
 
-package metricsasync
+package asyncblocking
 
 import (
 	"context"
 	"errors"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -97,10 +98,12 @@ type MetricHandle interface {
 	FsOpsLatency(
 		ctx context.Context, duration time.Duration, fsOp string,
 	)
+	Flush()
 }
 
 type otelMetrics struct {
 	ch                                     chan func()
+	wg                                     sync.WaitGroup
 	chFullFn                               func()
 	fsOpsCountFsOpBatchForgetAtomic        *atomic.Int64
 	fsOpsCountFsOpCreateFileAtomic         *atomic.Int64
@@ -283,19 +286,13 @@ func (o *otelMetrics) FsOpsLatency(
 	}
 }
 
+func (o *otelMetrics) Flush() {
+	close(o.ch)
+	o.wg.Wait()
+}
+
 func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn func()) (*otelMetrics, error) {
 	ch := make(chan func(), bufferSize)
-	for range workers {
-		go func() {
-			for {
-				f, ok := <-ch
-				if !ok {
-					return
-				}
-				f()
-			}
-		}()
-	}
 	meter := otel.Meter("gcsfuse")
 	var fsOpsCountFsOpBatchForgetAtomic,
 		fsOpsCountFsOpCreateFileAtomic,
@@ -375,7 +372,7 @@ func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn f
 		return nil, err
 	}
 
-	return &otelMetrics{
+	o := &otelMetrics{
 		ch:                                     ch,
 		chFullFn:                               chFullFn,
 		fsOpsCountFsOpBatchForgetAtomic:        &fsOpsCountFsOpBatchForgetAtomic,
@@ -409,5 +406,19 @@ func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn f
 		fsOpsCountFsOpUnlinkAtomic:             &fsOpsCountFsOpUnlinkAtomic,
 		fsOpsCountFsOpWriteFileAtomic:          &fsOpsCountFsOpWriteFileAtomic,
 		fsOpsLatency:                           fsOpsLatency,
-	}, nil
+	}
+	o.wg.Add(workers)
+	for range workers {
+		go func() {
+			defer o.wg.Done()
+			for {
+				f, ok := <-ch
+				if !ok {
+					return
+				}
+				f()
+			}
+		}()
+	}
+	return o, nil
 }

@@ -19,6 +19,7 @@ package paramchannel
 import (
 	"context"
 	"errors"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -108,9 +109,11 @@ type MetricHandle interface {
 	FsOpsLatency(
 		ctx context.Context, duration time.Duration, fsOp string,
 	)
+	Flush()
 }
 
 type otelMetrics struct {
+	wg                                     sync.WaitGroup
 	fsOpsCountCh                           chan fsOpsCountParams
 	fsOpsLatencyCh                         chan fsOpsLatencyParams
 	chFullFn                               func()
@@ -172,6 +175,12 @@ func (o *otelMetrics) FsOpsLatency(
 	default: // Unblock writes to channel if it's full.
 		o.chFullFn()
 	}
+}
+
+func (o *otelMetrics) Flush() {
+	close(o.fsOpsCountCh)
+	close(o.fsOpsLatencyCh)
+	o.wg.Wait()
 }
 
 func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn func()) (*otelMetrics, error) {
@@ -291,8 +300,10 @@ func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn f
 
 	fsOpsCountCh := make(chan fsOpsCountParams, bufferSize)
 	o.fsOpsCountCh = fsOpsCountCh
+	o.wg.Add(workers)
 	for range workers {
 		go func() {
+			defer o.wg.Done()
 			for params := range fsOpsCountCh {
 				switch params.fsOp {
 				case "BatchForget":
@@ -362,8 +373,10 @@ func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn f
 
 	fsOpsLatencyCh := make(chan fsOpsLatencyParams, bufferSize)
 	o.fsOpsLatencyCh = fsOpsLatencyCh
+	o.wg.Add(workers)
 	for range workers {
 		go func() {
+			defer o.wg.Done()
 			for params := range fsOpsLatencyCh {
 				switch params.fsOp {
 				case "BatchForget":
