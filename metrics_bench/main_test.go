@@ -26,6 +26,7 @@ import (
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssync"
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssyncmap"
 	"github.com/kislaykishore/benchmarks/metrics_bench/oldoptimizedimplementation"
+	"github.com/kislaykishore/benchmarks/metrics_bench/oldunoptimizedimplementation"
 	"github.com/kislaykishore/benchmarks/metrics_bench/paramchannel"
 	"github.com/kislaykishore/benchmarks/metrics_bench/reducedbuckets"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -801,6 +802,49 @@ func BenchmarkFsOpsLatencySyncOldOptimizedImpl(b *testing.B) {
 	// The otelMetrics struct uses a channel and workers for some operations, but
 	// FsOpsCount uses atomics directly.
 	metrics, err := oldoptimizedimplementation.NewOTelMetrics()
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			metrics.FsOpsLatency(ctx, 100, "StatFS")
+		}
+	})
+}
+
+func BenchmarkFsOpsCountSyncOldUnptimizedImpl(b *testing.B) {
+	// We use a no-op meter provider to avoid any overhead from metric exporters.
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := oldunoptimizedimplementation.NewOTelMetrics()
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			metrics.FsOpsCount(ctx, 1, "StatFS")
+		}
+	})
+}
+
+func BenchmarkFsOpsLatencySyncOldUnoptimizedImpl(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExporters(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := oldunoptimizedimplementation.NewOTelMetrics()
 	if err != nil {
 		b.Fatalf("NewOTelMetrics() error = %v", err)
 	}
