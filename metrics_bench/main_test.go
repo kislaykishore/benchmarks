@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/kislaykishore/benchmarks/metrics_bench/asyncblocking"
+	"github.com/kislaykishore/benchmarks/metrics_bench/exphistogram"
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssync"
 	"github.com/kislaykishore/benchmarks/metrics_bench/metricssyncmap"
 	"github.com/kislaykishore/benchmarks/metrics_bench/oldoptimizedimplementation"
@@ -527,6 +528,27 @@ func BenchmarkFsOpsLatencySync(b *testing.B) {
 	})
 }
 
+func BenchmarkFsOpsLatencySyncExponentialHistogram(b *testing.B) {
+	ctx := context.Background()
+	shFn := setupOTelMetricExportersWithExpHistogram(ctx)
+	b.Cleanup(func() {
+		shFn(ctx)
+	})
+	// The otelMetrics struct uses a channel and workers for some operations, but
+	// FsOpsCount uses atomics directly.
+	metrics, err := exphistogram.NewOTelMetrics(ctx, 3, 1)
+	if err != nil {
+		b.Fatalf("NewOTelMetrics() error = %v", err)
+	}
+
+	b.ResetTimer()
+	b.RunParallel(func(pb *testing.PB) {
+		for i := 0; pb.Next(); i++ {
+			metrics.FsOpsLatency(ctx, 100, "StatFS")
+		}
+	})
+}
+
 func BenchmarkFsOpsLatencyAsync(b *testing.B) {
 	ctx := context.Background()
 	shFn := setupOTelMetricExporters(ctx)
@@ -962,6 +984,37 @@ func setupOTelMetricExporters(ctx context.Context) (shutdownFn ShutdownFn) {
 	}
 
 	meterProvider := metric.NewMeterProvider(options...)
+	shutdownFns = append(shutdownFns, meterProvider.Shutdown)
+
+	otel.SetMeterProvider(meterProvider)
+
+	return JoinShutdownFunc(shutdownFns...)
+}
+
+// setExponentialAggregation is an OTel View that drops the metrics that don't match the allowed prefixes.
+func setExponentialAggregation(i metric.Instrument) (metric.Stream, bool) {
+	s := metric.Stream{Name: i.Name, Description: i.Description, Unit: i.Unit}
+	i.Name = "fs/ops_latency"
+	s.Aggregation = metric.AggregationBase2ExponentialHistogram{MaxSize: 34, MaxScale: 0}
+	return s, true
+}
+
+func setupOTelMetricExportersWithExpHistogram(ctx context.Context) (shutdownFn ShutdownFn) {
+	shutdownFns := make([]ShutdownFn, 0)
+	options := make([]metric.Option, 0)
+
+	opts, shutdownFn := setupPrometheus(8080)
+	options = append(options, opts...)
+	shutdownFns = append(shutdownFns, shutdownFn)
+
+	res, err := getResource(ctx)
+	if err == nil {
+		options = append(options, metric.WithResource(res))
+	}
+	options = append(options, metric.WithView(setExponentialAggregation))
+
+	meterProvider := metric.NewMeterProvider(options...)
+
 	shutdownFns = append(shutdownFns, meterProvider.Shutdown)
 
 	otel.SetMeterProvider(meterProvider)
