@@ -134,6 +134,8 @@ type otelMetrics struct {
 	fsOpsLatency                           metric.Int64Histogram
 }
 
+func (o *otelMetrics) Flush() {}
+
 func (o *otelMetrics) FsOpsCount(
 	inc int64, fsOp string,
 ) {
@@ -270,7 +272,7 @@ func (o *otelMetrics) FsOpsLatency(
 
 }
 
-func NewOTelMetrics(ctx context.Context, workers int, bufferSize int) (*otelMetrics, error) {
+func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn func()) (*otelMetrics, error) {
 	ch := make(chan func(), bufferSize)
 	for range workers {
 		go func() {

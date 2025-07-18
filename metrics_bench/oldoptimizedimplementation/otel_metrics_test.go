@@ -15,85 +15,15 @@
 package oldoptimizedimplementation
 
 import (
-	"context"
-	"fmt"
 	"testing"
 
 	"github.com/kislaykishore/benchmarks/metrics_bench/testutils"
 )
 
 func BenchmarkFsOpsCount(b *testing.B) {
-	workers := 3
-	for _, bufferSize := range testutils.BufferSizes {
-		for _, discard := range []bool{true, false} {
-			for _, multipleObs := range []bool{true, false} {
-				b.Run(fmt.Sprintf("workers=%v/bufferSize=%d/discard=%v/multipleObs=%v", workers, bufferSize, discard, multipleObs), func(b *testing.B) {
-					// We use a no-op meter provider to avoid any overhead from metric exporters.
-					ctx := context.Background()
-					shFn := testutils.SetupOTelMetricExporters(ctx)
-					b.Cleanup(func() {
-						shFn(ctx)
-					})
-					// The otelMetrics struct uses a channel and workers for some operations, but
-					// FsOpsCount uses atomics directly.
-					metrics, err := NewOTelMetrics()
-					if err != nil {
-						b.Fatalf("NewOTelMetrics() error = %v", err)
-					}
-
-					b.ResetTimer()
-					b.RunParallel(func(pb *testing.PB) {
-						for i := 0; pb.Next(); i++ {
-							var op string
-							if multipleObs {
-								op = testutils.FsOps[i%len(testutils.FsOps)]
-							} else {
-								op = "StatFS"
-							}
-							metrics.FsOpsCount(ctx, 1, op)
-						}
-					})
-					b.StopTimer()
-				})
-			}
-		}
-	}
+	testutils.FsOpsCountBenchmark(b, testutils.SetupOTelMetricExporters, NewOTelMetrics)
 }
 
 func BenchmarkFsOpsLatency(b *testing.B) {
-	workers := 3
-	for _, bufferSize := range testutils.BufferSizes {
-		for _, discard := range []bool{true, false} {
-			for _, multipleObs := range []bool{true, false} {
-				b.Run(fmt.Sprintf("workers=%v/bufferSize=%d/discard=%v/multipleObs=%v", workers, bufferSize, discard, multipleObs), func(b *testing.B) {
-					// We use a no-op meter provider to avoid any overhead from metric exporters.
-					ctx := context.Background()
-					shFn := testutils.SetupOTelMetricExporters(ctx)
-					b.Cleanup(func() {
-						shFn(ctx)
-					})
-					// The otelMetrics struct uses a channel and workers for some operations, but
-					// FsOpsCount uses atomics directly.
-					metrics, err := NewOTelMetrics()
-					if err != nil {
-						b.Fatalf("NewOTelMetrics() error = %v", err)
-					}
-
-					b.ResetTimer()
-					b.RunParallel(func(pb *testing.PB) {
-						for i := 0; pb.Next(); i++ {
-							var op string
-							if multipleObs {
-								op = testutils.FsOps[i%len(testutils.FsOps)]
-							} else {
-								op = "StatFS"
-							}
-							metrics.FsOpsLatency(ctx, 100, op)
-						}
-					})
-					b.StopTimer()
-				})
-			}
-		}
-	}
+	testutils.FsOpsLatencyBenchmark(b, testutils.SetupOTelMetricExporters, NewOTelMetrics)
 }

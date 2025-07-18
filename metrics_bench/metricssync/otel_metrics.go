@@ -270,7 +270,7 @@ func (o *otelMetrics) FsOpsLatency(
 
 }
 
-func NewOTelMetrics(ctx context.Context, workers int, bufferSize int) (*otelMetrics, error) {
+func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, _ func()) (*otelMetrics, error) {
 	ch := make(chan func(), bufferSize)
 	for range workers {
 		go func() {

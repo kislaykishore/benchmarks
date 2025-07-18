@@ -19,16 +19,119 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"testing"
 	"time"
 
-	"github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.opentelemetry.io/contrib/detectors/gcp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
+
+type MetricHandle interface {
+	FsOpsCount(
+		inc int64, fsOp string,
+	)
+	FsOpsLatency(
+		ctx context.Context, duration time.Duration, fsOp string,
+	)
+	Flush()
+}
+
+type NewOTelMetrics func(ctx context.Context, workers int, bufferSize int, chFullFn func()) (MetricHandle, error)
+
+func FsOpsCountBenchmark(b *testing.B, setupFn func(ctx context.Context) ShutdownFn, newOTelMetrics NewOTelMetrics) {
+	workers := 3
+	for _, bufferSize := range BufferSizes {
+		for _, discard := range []bool{true, false} {
+			if !discard && bufferSize == 1 {
+				// skip this case because it fails.
+				continue
+			}
+			for _, multipleObs := range []bool{true, false} {
+				// We use a no-op meter provider to avoid any overhead from metric exporters.
+				ctx := context.Background()
+				shFn := setupFn(ctx)
+				b.Cleanup(func() {
+					shFn(ctx)
+				})
+				// The otelMetrics struct uses a channel and workers for some operations, but
+				// FsOpsCount uses atomics directly.
+				metrics, err := newOTelMetrics(ctx, workers, bufferSize, func() {
+					if !discard {
+						b.FailNow()
+					}
+				})
+				if err != nil {
+					b.Fatalf("NewOTelMetrics() error = %v", err)
+				}
+				b.Run(fmt.Sprintf("workers=%v/bufferSize=%d/discard=%v/multipleObs=%v", workers, bufferSize, discard, multipleObs), func(b *testing.B) {
+					b.RunParallel(func(pb *testing.PB) {
+						for i := 0; pb.Next(); i++ {
+							var op string
+							if multipleObs {
+								op = FsOps[i%len(FsOps)]
+							} else {
+								op = "StatFS"
+							}
+							metrics.FsOpsCount(1, op)
+						}
+					})
+					b.StopTimer()
+					metrics.Flush()
+				})
+			}
+		}
+	}
+}
+
+func FsOpsLatencyBenchmark(b *testing.B, setupFn func(ctx context.Context) ShutdownFn, newOTelMetrics NewOTelMetrics) {
+	workers := 3
+	for _, bufferSize := range BufferSizes {
+		for _, discard := range []bool{true, false} {
+			for _, multipleObs := range []bool{true, false} {
+				if !discard && bufferSize == 1 {
+					// this case fails.
+					continue
+				}
+				// We use a no-op meter provider to avoid any overhead from metric exporters.
+				ctx := context.Background()
+				shFn := setupFn(ctx)
+				b.Cleanup(func() {
+					shFn(ctx)
+				})
+				// The otelMetrics struct uses a channel and workers for some operations, but
+				// FsOpsCount uses atomics directly.
+				metrics, err := newOTelMetrics(ctx, workers, bufferSize, func() {
+					if !discard {
+						b.FailNow()
+					}
+				})
+				if err != nil {
+					b.Fatalf("NewOTelMetrics() error = %v", err)
+				}
+				b.Run(fmt.Sprintf("workers=%v/bufferSize=%d/discard=%v/multipleObs=%v", workers, bufferSize, discard, multipleObs), func(b *testing.B) {
+					b.RunParallel(func(pb *testing.PB) {
+						for i := 0; pb.Next(); i++ {
+							var op string
+							if multipleObs {
+								op = FsOps[i%len(FsOps)]
+							} else {
+								op = "StatFS"
+							}
+							metrics.FsOpsLatency(ctx, 100, op)
+						}
+					})
+					b.StopTimer()
+					metrics.Flush()
+				})
+			}
+		}
+	}
+}
 
 var BufferSizes = []int{1, 10240000, 8 * 10240000}
 
