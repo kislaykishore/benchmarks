@@ -30,9 +30,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
 
-const (
-	BufferSize = 8 * 10240000
-)
+var BufferSizes = []int{1, 10240000, 8 * 10240000}
 
 var FsOps = []string{"StatFS", "LookUpInode", "GetInodeAttributes", "Open", "Read", "Write", "Close"}
 
