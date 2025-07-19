@@ -33,7 +33,7 @@ import (
 
 type MetricHandle interface {
 	FsOpsCount(
-		inc int64, fsOp string,
+		ctx context.Context, inc int64, fsOp string,
 	)
 	FsOpsLatency(
 		ctx context.Context, duration time.Duration, fsOp string,
@@ -55,9 +55,6 @@ func FsOpsCountBenchmark(b *testing.B, setupFn func(ctx context.Context) Shutdow
 				// We use a no-op meter provider to avoid any overhead from metric exporters.
 				ctx := context.Background()
 				shFn := setupFn(ctx)
-				b.Cleanup(func() {
-					shFn(ctx)
-				})
 				// The otelMetrics struct uses a channel and workers for some operations, but
 				// FsOpsCount uses atomics directly.
 				metrics, err := newOTelMetrics(ctx, workers, bufferSize, func() {
@@ -77,12 +74,12 @@ func FsOpsCountBenchmark(b *testing.B, setupFn func(ctx context.Context) Shutdow
 							} else {
 								op = "StatFS"
 							}
-							metrics.FsOpsCount(1, op)
+							metrics.FsOpsCount(ctx, 1, op)
 						}
 					})
-					b.StopTimer()
-					metrics.Flush()
 				})
+				metrics.Flush()
+				shFn(ctx)
 			}
 		}
 	}
@@ -100,9 +97,6 @@ func FsOpsLatencyBenchmark(b *testing.B, setupFn func(ctx context.Context) Shutd
 				// We use a no-op meter provider to avoid any overhead from metric exporters.
 				ctx := context.Background()
 				shFn := setupFn(ctx)
-				b.Cleanup(func() {
-					shFn(ctx)
-				})
 				// The otelMetrics struct uses a channel and workers for some operations, but
 				// FsOpsCount uses atomics directly.
 				metrics, err := newOTelMetrics(ctx, workers, bufferSize, func() {
@@ -125,9 +119,9 @@ func FsOpsLatencyBenchmark(b *testing.B, setupFn func(ctx context.Context) Shutd
 							metrics.FsOpsLatency(ctx, 100, op)
 						}
 					})
-					b.StopTimer()
-					metrics.Flush()
 				})
+				metrics.Flush()
+				shFn(ctx)
 			}
 		}
 	}

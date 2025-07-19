@@ -25,6 +25,8 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
+
+	"github.com/kislaykishore/benchmarks/metrics_bench/testutils"
 )
 
 var (
@@ -135,7 +137,7 @@ type otelMetrics struct {
 }
 
 func (o *otelMetrics) FsOpsCount(
-	inc int64, fsOp string,
+	ctx context.Context, inc int64, fsOp string,
 ) {
 	switch fsOp {
 	case "BatchForget":
@@ -270,7 +272,9 @@ func (o *otelMetrics) FsOpsLatency(
 
 }
 
-func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, _ func()) (*otelMetrics, error) {
+func (o *otelMetrics) Flush() {}
+
+func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, _ func()) (testutils.MetricHandle, error) {
 	ch := make(chan func(), bufferSize)
 	for range workers {
 		go func() {

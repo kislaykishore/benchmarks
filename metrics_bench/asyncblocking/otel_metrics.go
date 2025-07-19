@@ -26,6 +26,8 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
+
+	"github.com/kislaykishore/benchmarks/metrics_bench/testutils"
 )
 
 var (
@@ -139,7 +141,7 @@ type otelMetrics struct {
 }
 
 func (o *otelMetrics) FsOpsCount(
-	inc int64, fsOp string,
+	ctx context.Context, inc int64, fsOp string,
 ) {
 	select {
 	case o.ch <- func() {
@@ -291,7 +293,7 @@ func (o *otelMetrics) Flush() {
 	o.wg.Wait()
 }
 
-func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn func()) (*otelMetrics, error) {
+func NewOTelMetrics(ctx context.Context, workers int, bufferSize int, chFullFn func()) (testutils.MetricHandle, error) {
 	ch := make(chan func(), bufferSize)
 	meter := otel.Meter("gcsfuse")
 	var fsOpsCountFsOpBatchForgetAtomic,

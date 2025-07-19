@@ -2,153 +2,125 @@ goos: linux
 goarch: amd64
 pkg: github.com/kislaykishore/benchmarks/metrics_bench/paramchannel
 cpu: Intel(R) Xeon(R) CPU @ 2.20GHz
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	12171266	         9.710 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	12214848	         9.725 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	12253884	         9.809 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	12291487	         9.760 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	12216309	        11.85 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	12058548	         9.790 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	28209526	         4.168 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	28319994	         4.184 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	27514674	         4.212 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	27654802	         4.184 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	27895461	         4.165 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	28290656	         4.199 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2        	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2        	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2        	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2        	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2        	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2        	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2       	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2       	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2       	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2       	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2       	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2       	--- FAIL: BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	  947599	       152.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       160.3 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	  808280	       148.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       152.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       151.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       149.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       140.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       141.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       136.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       141.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       131.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       126.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       158.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       134.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       156.3 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       138.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	  868672	       147.7 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	  731878	       156.7 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       138.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       146.4 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       136.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       158.4 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	  820975	       147.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	  767010	       132.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       158.4 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       147.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       148.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	  855373	       161.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       165.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	  813426	       159.3 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	  799974	       132.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	  806022	       156.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	 1000000	       142.5 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	  817160	       147.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	 1000000	       120.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	  833838	       125.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       140.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	  809154	       153.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       156.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       159.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       150.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       137.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       142.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       156.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       143.9 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       151.7 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       127.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       141.8 ns/op	       0 B/op	       0 allocs/op
---- FAIL: BenchmarkFsOpsCount
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11863789	        10.30 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11914875	         9.911 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11961625	        10.01 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11975451	         9.984 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11775142	        10.11 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11741031	         9.932 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	26865482	         5.663 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	26889628	         4.454 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	26941452	         4.383 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	26797203	         4.485 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	23297595	         4.425 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	26017455	         4.432 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2               	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2               	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2               	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2               	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2               	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2               	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=true-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2              	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2              	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2              	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2              	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2              	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2              	--- FAIL: BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=false/multipleObs=false-2
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       120.7 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	  908198	       111.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       122.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	  852697	       143.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	  790426	       140.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	  741352	       168.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1463461	        86.25 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1357509	        88.57 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1427168	        83.14 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1232204	        96.40 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1377084	        83.28 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1473799	        83.58 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       111.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       128.8 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1058281	       102.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       139.6 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	  996537	       119.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       105.6 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1301251	        88.05 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1349740	        84.43 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1390915	        95.02 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1322760	        87.28 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1215790	        87.03 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1364238	        86.41 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       114.7 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       108.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       121.7 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       103.7 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       113.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       101.1 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1420684	        86.16 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1438231	        93.31 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1455303	        87.31 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1450825	        86.47 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1395966	        84.94 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1337560	        88.79 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       104.8 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	  976986	       115.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       112.0 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       115.3 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       104.2 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	  933842	       121.4 ns/op	       1 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1306278	        87.98 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1265187	        84.14 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1388524	        83.30 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1341286	        87.57 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1343565	        83.32 ns/op	       0 B/op	       0 allocs/op
-BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1324876	        88.74 ns/op	       0 B/op	       0 allocs/op
---- FAIL: BenchmarkFsOpsLatency
-FAIL
-exit status 1
-FAIL	github.com/kislaykishore/benchmarks/metrics_bench/paramchannel	275.677s
-FAIL
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	11675568	        10.15 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	11449144	        10.35 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	11726400	        10.13 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	 9575545	        10.46 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	11659413	        10.18 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=true-2         	11933164	        10.26 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	21439041	         5.184 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	22805506	         5.129 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	22607780	         5.151 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	23118477	         5.134 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	22856641	         5.156 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=1/discard=true/multipleObs=false-2        	22636849	         5.133 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       148.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       150.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       163.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       158.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       153.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2  	 1000000	       142.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       153.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       145.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	  792600	       146.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       155.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       143.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2 	 1000000	       147.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       147.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       151.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       153.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       142.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       139.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2 	 1000000	       157.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       153.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       148.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       157.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       155.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       154.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2         	 1000000	       140.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       162.2 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	  897709	       167.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       170.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       157.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       161.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2           	 1000000	       166.2 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	 1000000	       143.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	  812703	       147.2 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	 1000000	       153.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	 1000000	       151.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	  764371	       135.0 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2          	 1000000	       156.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       166.9 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       171.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       169.2 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       158.2 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       166.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2          	 1000000	       164.0 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	  785684	       136.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       144.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       134.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       150.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	 1000000	       136.7 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsCount/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2         	  788764	       131.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	10922961	        10.64 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11142457	        10.63 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11479593	        10.73 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	10830816	        10.40 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11764908	        10.46 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=true-2                	11242856	        10.45 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	20981089	         5.728 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	20598775	         5.691 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	20495394	         5.728 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	20578364	         6.007 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	20665372	         5.669 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=1/discard=true/multipleObs=false-2               	20002323	         5.860 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	  985062	       113.7 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       125.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       123.5 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       112.2 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       114.7 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=true-2         	 1000000	       107.8 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1000000	       110.2 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1000000	       107.4 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1203285	       104.7 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1000000	       112.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1245454	       100.7 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=true/multipleObs=false-2        	 1000000	       102.0 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       134.1 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	  853052	       141.8 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       132.2 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	  860619	       140.4 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       144.1 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=true-2        	 1000000	       139.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1000000	       110.8 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1000000	       108.5 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1280359	       108.4 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	  948549	       110.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1000000	       100.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=10240000/discard=false/multipleObs=false-2       	 1000000	       102.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	  826011	       122.6 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	  784974	       139.8 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       134.3 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	  878894	       130.5 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       126.4 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=true-2         	 1000000	       122.0 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1000000	       106.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1000000	       113.1 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1000000	       111.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	  986056	       110.8 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	  974049	       105.4 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=true/multipleObs=false-2        	 1000000	       109.9 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       132.1 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	  855890	       140.3 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	  911686	       155.9 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       141.4 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	 1000000	       132.9 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=true-2        	  847420	       137.0 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1251145	       106.4 ns/op	       1 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1207524	       101.1 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1216634	       102.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1000000	       102.3 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1000000	       105.0 ns/op	       0 B/op	       0 allocs/op
+BenchmarkFsOpsLatency/workers=3/bufferSize=81920000/discard=false/multipleObs=false-2       	 1000000	       108.6 ns/op	       1 B/op	       0 allocs/op
+PASS
+ok  	github.com/kislaykishore/benchmarks/metrics_bench/paramchannel	208.723s

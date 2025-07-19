@@ -23,6 +23,8 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
+
+	"github.com/kislaykishore/benchmarks/metrics_bench/testutils"
 )
 
 var (
@@ -56,6 +58,8 @@ type otelMetrics struct {
 	fsOpsLatency metric.Float64Histogram
 }
 
+func (o *otelMetrics) Flush() {}
+
 func (o *otelMetrics) FsOpsCount(ctx context.Context, inc int64, fsOp string) {
 	o.fsOpsCount.Add(ctx, inc, fsOpsAttrOption(fsOp))
 }
@@ -64,7 +68,7 @@ func (o *otelMetrics) FsOpsLatency(ctx context.Context, latency time.Duration, f
 	o.fsOpsLatency.Record(ctx, float64(latency.Microseconds()), fsOpsAttrOption(fsOp))
 }
 
-func NewOTelMetrics() (*otelMetrics, error) {
+func NewOTelMetrics(ctx context.Context, _ int, _ int, _ func()) (testutils.MetricHandle, error) {
 	fsOpsCount, err1 := fsOpsMeter.Int64Counter("fs/ops_count", metric.WithDescription("The cumulative number of ops processed by the file system."))
 	fsOpsLatency, err2 := fsOpsMeter.Float64Histogram("fs/ops_latency", metric.WithDescription("The cumulative distribution of file system operation latencies"), metric.WithUnit("us"),
 		metric.WithExplicitBucketBoundaries(1, 2, 3, 4, 5, 6, 8, 10, 13, 16, 20, 25, 30, 40, 50, 65, 80, 100, 130, 160, 200, 250, 300, 400, 500, 650, 800, 1000, 2000, 5000, 10000, 20000, 50000, 100000))
