@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"testing"
 	"time"
 
@@ -35,6 +36,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/prometheus"
 	"go.opentelemetry.io/otel/sdk/metric"
+	"go.opentelemetry.io/otel/sdk/metric/exemplar"
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 )
@@ -44,6 +46,7 @@ const (
 )
 
 var fsOps = []string{"StatFS", "LookUpInode", "GetInodeAttributes", "Open", "Read", "Write", "Close"}
+var exemplarFilterOff = os.Getenv("EXEMPLAR_FILTER_OFF")
 
 func BenchmarkFsOpsCountAsync(b *testing.B) {
 	// We use a no-op meter provider to avoid any overhead from metric exporters.
@@ -982,6 +985,9 @@ func setupOTelMetricExporters(ctx context.Context) (shutdownFn ShutdownFn) {
 	if err == nil {
 		options = append(options, metric.WithResource(res))
 	}
+	if exemplarFilterOff != "" {
+		options = append(options, metric.WithExemplarFilter(exemplar.AlwaysOffFilter))
+	}
 
 	meterProvider := metric.NewMeterProvider(options...)
 	shutdownFns = append(shutdownFns, meterProvider.Shutdown)
@@ -1012,6 +1018,9 @@ func setupOTelMetricExportersWithExpHistogram(ctx context.Context) (shutdownFn S
 		options = append(options, metric.WithResource(res))
 	}
 	options = append(options, metric.WithView(setExponentialAggregation))
+	if exemplarFilterOff != "" {
+		options = append(options, metric.WithExemplarFilter(exemplar.AlwaysOffFilter))
+	}
 
 	meterProvider := metric.NewMeterProvider(options...)
 
