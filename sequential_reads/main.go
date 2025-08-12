@@ -17,7 +17,9 @@ import (
 func main() {
 	// Define flags
 	goMaxProcs := flag.Int("gomaxprocs", runtime.GOMAXPROCS(0), "GoMaxProcs value")
+	minGoMaxProcs := flag.Int("min-gomaxprocs", 30, "Minimum GoMaxProcs value")
 	numThreads := flag.Int("max-num-goroutines", runtime.NumCPU(), "Number of GoRoutines")
+	minNumThreads := flag.Int("min-num-goroutines", 50, "Minimum number of GoRoutines")
 	mountPoint := flag.String("mount-point", "", "Mount point")
 
 	// Parse the command-line flags from os.Args[1:]. Must be called
@@ -31,9 +33,9 @@ func main() {
 	maxBW := 0.0
 	bestGOMaxProcs := 0
 	bestNumThreads := 0
-	for i := 1; i < *goMaxProcs; i = i + 10 {
+	for i := *minGoMaxProcs; i < *goMaxProcs; i = i + 10 {
 		runtime.GOMAXPROCS(*goMaxProcs)
-		for j := 1; j < *numThreads; j = j + 10 {
+		for j := *minNumThreads; j < *numThreads; j = j + 10 {
 			clearPageCache()
 			bw := computeBandwidth(j, *mountPoint)
 			fmt.Printf("Running with GOMAXPROCS: %d, Goroutines: %d and BW: %.2f GiB/s\n", i, j, bw)
