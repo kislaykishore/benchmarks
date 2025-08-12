@@ -124,5 +124,5 @@ func computeBandwidth(numThreads int, mountPoint string) float64 {
 		return 0
 	}
 
-	return totalBytesRead / (1024 * 1024 * 1024 * duration.Seconds())
+	return float64(totalBytesRead) / float64(1024*1024*1024*duration.Seconds())
 }
