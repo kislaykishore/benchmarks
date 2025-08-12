@@ -1,11 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io"
 	"io/fs"
 	"log"
+	"math"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -17,9 +19,7 @@ import (
 func main() {
 	// Define flags
 	goMaxProcs := flag.Int("gomaxprocs", runtime.GOMAXPROCS(0), "GoMaxProcs value")
-	minGoMaxProcs := flag.Int("min-gomaxprocs", 30, "Minimum GoMaxProcs value")
 	numThreads := flag.Int("max-num-goroutines", runtime.NumCPU(), "Number of GoRoutines")
-	minNumThreads := flag.Int("min-num-goroutines", 50, "Minimum number of GoRoutines")
 	mountPoint := flag.String("mount-point", "", "Mount point")
 
 	// Parse the command-line flags from os.Args[1:]. Must be called
@@ -33,20 +33,27 @@ func main() {
 	maxBW := 0.0
 	bestGOMaxProcs := 0
 	bestNumThreads := 0
-	for i := *minGoMaxProcs; i < *goMaxProcs; i = i + 10 {
-		runtime.GOMAXPROCS(*goMaxProcs)
-		for j := *minNumThreads; j < *numThreads; j = j + 10 {
+	bestTimeTaken := time.Duration(math.MaxInt64)
+	for i := *goMaxProcs; i > 0; i = i - 10 {
+		runtime.GOMAXPROCS(i)
+		for j := *numThreads; j > 0; j = j - 10 {
 			clearPageCache()
-			bw := computeBandwidth(j, *mountPoint)
-			fmt.Printf("Running with GOMAXPROCS: %d, Goroutines: %d and BW: %.2f GiB/s\n", i, j, bw)
+			bw, timeTaken, cancelled := computeBandwidth(j, *mountPoint, bestTimeTaken)
+			if cancelled {
+				fmt.Printf("Run with GOMAXPROCS: %d, Goroutines: %d was cancelled as it exceeded best time (%.2fs).\n", i, j, bestTimeTaken.Seconds())
+				continue
+			}
+			fmt.Printf("Running with GOMAXPROCS: %d, Goroutines: %d -> BW: %.2f GiB/s, Time: %.2fs\n", i, j, bw, timeTaken.Seconds())
 			if bw > maxBW {
 				bestGOMaxProcs = i
 				bestNumThreads = j
 				maxBW = bw
+				bestTimeTaken = timeTaken
 			}
 		}
 	}
 
+	fmt.Printf("\n--- Results ---\nMax bandwidth: %.2f GiB/s\n", maxBW)
 	fmt.Printf("Best GOMAXPROCS: %d, Goroutines: %d\n", bestGOMaxProcs, bestNumThreads)
 }
 
@@ -59,7 +66,8 @@ func clearPageCache() {
 		panic(fmt.Sprintf("Failed to clear page cache: %v", err))
 	}
 }
-func computeBandwidth(numThreads int, mountPoint string) float64 {
+
+func computeBandwidth(numThreads int, mountPoint string, bestTimeTaken time.Duration) (float64, time.Duration, bool) {
 	files := []string{}
 	err := filepath.WalkDir(mountPoint, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -76,8 +84,11 @@ func computeBandwidth(numThreads int, mountPoint string) float64 {
 
 	if len(files) == 0 {
 		log.Printf("No files found in %s", mountPoint)
-		return 0
+		return 0, 0, false
 	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	jobs := make(chan string, len(files))
 	results := make(chan int64, len(files))
@@ -88,28 +99,55 @@ func computeBandwidth(numThreads int, mountPoint string) float64 {
 		wg.Add(1)
 		go func(k int) {
 			defer wg.Done()
-			for path := range jobs {
-				f, err := os.Open(path)
-				if err != nil {
-					log.Printf("Failed to open file %s: %v", path, err)
-					continue
-				}
+			for {
+				select {
+				case path, ok := <-jobs:
+					if !ok {
+						return
+					}
+					f, err := os.Open(path)
+					if err != nil {
+						log.Printf("Failed to open file %s: %v", path, err)
+						continue
+					}
 
-				n, err := io.CopyBuffer(io.Discard, f, buffer[k*1024*1024:(k+1)*1024*1024])
-				f.Close()
-				if err != nil {
-					log.Printf("Failed to read file %s: %v", path, err)
-					continue
+					n, err := io.CopyBuffer(io.Discard, f, buffer[k*1024*1024:(k+1)*1024*1024])
+					f.Close()
+					if err != nil {
+						log.Printf("Failed to read file %s: %v", path, err)
+						continue
+					}
+					results <- n
+				case <-ctx.Done():
+					return
 				}
-				results <- n
 			}
 		}(w)
 	}
 
 	startTime := time.Now()
 
+	// Goroutine to cancel if time exceeds bestTimeTaken
+	go func() {
+		if bestTimeTaken >= time.Duration(math.MaxInt64) {
+			return
+		}
+		timer := time.NewTimer(bestTimeTaken)
+		defer timer.Stop()
+		select {
+		case <-timer.C:
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
+
+jobLoop:
 	for _, file := range files {
-		jobs <- file
+		select {
+		case jobs <- file:
+		case <-ctx.Done():
+			break jobLoop
+		}
 	}
 	close(jobs)
 
@@ -117,6 +155,9 @@ func computeBandwidth(numThreads int, mountPoint string) float64 {
 	close(results)
 
 	duration := time.Since(startTime)
+	if ctx.Err() != nil {
+		return 0, duration, true
+	}
 
 	var totalBytesRead int64
 	for bytesRead := range results {
@@ -124,8 +165,8 @@ func computeBandwidth(numThreads int, mountPoint string) float64 {
 	}
 
 	if duration.Seconds() == 0 {
-		return 0
+		return 0, duration, false
 	}
 
-	return float64(totalBytesRead) / float64(1024*1024*1024*duration.Seconds())
+	return float64(totalBytesRead) / (1024 * 1024 * 1024) / duration.Seconds(), duration, false
 }
