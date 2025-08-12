@@ -34,7 +34,6 @@ func main() {
 	bestGOMaxProcs := 0
 	bestNumThreads := 0
 	bestTimeTaken := time.Duration(math.MaxInt64)
-	cancellationCount := 0
 	for i := *goMaxProcs; i > 0; i = i - 10 {
 		runtime.GOMAXPROCS(i)
 		for j := *numThreads; j > 0; j = j - 10 {
@@ -42,14 +41,7 @@ func main() {
 			bw, timeTaken, cancelled := computeBandwidth(j, *mountPoint, bestTimeTaken)
 			if cancelled {
 				fmt.Printf("Run with GOMAXPROCS: %d, Goroutines: %d was cancelled as it exceeded best time (%.2fs).\n", i, j, bestTimeTaken.Seconds())
-				cancellationCount++
-				if cancellationCount == 3 {
-					cancellationCount = 0
-					break
-				}
 				continue
-			} else {
-				cancellationCount = 0
 			}
 			fmt.Printf("Running with GOMAXPROCS: %d, Goroutines: %d -> BW: %.2f GiB/s, Time: %.2fs\n", i, j, bw, timeTaken.Seconds())
 			if bw > maxBW {
