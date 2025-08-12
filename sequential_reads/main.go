@@ -33,12 +33,13 @@ func main() {
 	bestNumThreads := 0
 	for i := 1; i < *goMaxProcs; i = i + 10 {
 		runtime.GOMAXPROCS(*goMaxProcs)
-		for i := 1; i < *numThreads; i = i + 10 {
+		for j := 1; j < *numThreads; j = j + 10 {
 			clearPageCache()
-			bw := computeBandwidth(*numThreads, *mountPoint)
+			bw := computeBandwidth(j, *mountPoint)
+			fmt.Printf("Running with GOMAXPROCS: %d, Goroutines: %d and BW: %.2f GiB/s\n", i, j, bw)
 			if bw > maxBW {
-				bestGOMaxProcs = *goMaxProcs
-				bestNumThreads = *numThreads
+				bestGOMaxProcs = i
+				bestNumThreads = j
 				maxBW = bw
 			}
 		}
