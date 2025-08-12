@@ -48,6 +48,8 @@ func main() {
 					break
 				}
 				continue
+			} else {
+				cancellationCount = 0
 			}
 			fmt.Printf("Running with GOMAXPROCS: %d, Goroutines: %d -> BW: %.2f GiB/s, Time: %.2fs\n", i, j, bw, timeTaken.Seconds())
 			if bw > maxBW {
